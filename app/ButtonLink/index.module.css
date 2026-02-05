@@ -1,0 +1,14 @@
+.grid {
+  display: block;
+}
+
+.button {
+  display: flex;
+  padding: 20px 40px;
+  margin: 10px;
+  border-radius: var(--border-radius);
+  width: 300px;
+  text-align: center;
+  background-color: tan;
+  color: black;
+}
