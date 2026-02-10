@@ -5,4 +5,36 @@
   width: 800px;
   height: 700px;
   border: none;
+  margin-bottom: 50px;
+}
+
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: -50;
+}
+
+.link {
+  text-decoration: none;
+  text-align: center;
+  background-color: tan;
+
+  padding: 10px;
+  color: black;
+  font-size: 35px;
+  height: 50px;
+  width: 300px;
+  border-radius: 10%;
+}
+
+.link:hover {
+  color: blue;
+}
+
+.otherpage {
+  display: flex;
+  justify-content: space-between;
 }
