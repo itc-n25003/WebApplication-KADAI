@@ -6,6 +6,7 @@
   height: 700px;
   border: none;
   margin-bottom: 50px;
+  border-radius: 5%;
 }
 
 .bg {
@@ -21,7 +22,7 @@
   text-decoration: none;
   text-align: center;
   background-color: tan;
-
+  margin-left: 300px;
   padding: 10px;
   color: black;
   font-size: 35px;
@@ -37,4 +38,9 @@
 .otherpage {
   display: flex;
   justify-content: space-between;
+}
+
+.linedData {
+  display: flex;
+  gap: 80px;
 }

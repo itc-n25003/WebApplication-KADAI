@@ -1,46 +1,33 @@
-import styles from "./page.module.css";
-import Image from "next/image";
-import ButtonLink from "./ButtonLink";
+import Link from "next/link";
+import { fetchMicroCMSData } from "@/app/_libs/microcms";
+import { MicroCMSResponse } from "@/app/types/border";
 
-export default function Page() {
+export default async function HomePage() {
+  const data: MicroCMSResponse = await fetchMicroCMSData();
+
+  // 重複除いたサーバーリスト
+  const servers = Array.from(
+    new Map(
+      data.contents
+        .flatMap((item) => item.server)
+        .map((s) => [s.serverNumber, s]),
+    ).values(),
+  );
+
   return (
-    <>
-      <Image
-        className={styles.topimage}
-        src="/topimage.png"
-        alt="後で差し替え"
-        width={1200}
-        height={450}
-      />
-      <div className={styles.grid}>
-        <Image
-          className={styles.bg}
-          src="/drop_bg_blue.png"
-          alt=""
-          width={800}
-          height={480}
-        />
-        <ButtonLink href="/infopage/">横須賀鎮守府</ButtonLink>
-        <ButtonLink href="info/page.tsx">呉鎮守府</ButtonLink>
-        <ButtonLink href="info/page.tsx">佐世保鎮守府</ButtonLink>
-        <ButtonLink href="info/page.tsx">舞鶴鎮守府</ButtonLink>
-        <ButtonLink href="info/page.tsx">大湊警備府</ButtonLink>
-        <ButtonLink href="info/page.tsx">トラック泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">リンガ泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">ラバウル基地</ButtonLink>
-        <ButtonLink href="info/page.tsx">リンガ泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">ショートランド泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">ブイン基地</ButtonLink>
-        <ButtonLink href="info/page.tsx">タウイタウイ泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">パラオ泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">ブルネイ泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">単冠湾泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">幌筵泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">鹿屋泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">岩川基地</ButtonLink>
-        <ButtonLink href="info/page.tsx">佐伯湾泊地</ButtonLink>
-        <ButtonLink href="info/page.tsx">柱島泊地</ButtonLink>
-      </div>
-    </>
+    <main className="p-4">
+      <ul className="space-y-2">
+        {servers.map((s) => (
+          <li key={s.id}>
+            <Link
+              className="text-blue-600 underline"
+              href={`/server/${s.serverNumber}`}
+            >
+              {s.server} ({s.serverNumber})
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 }
