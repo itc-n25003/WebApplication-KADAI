@@ -1,5 +1,5 @@
 {
-  "name": "kadai-project",
+  "name": "webapplication-kadai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "microcms-js-sdk": "^3.1.0",
+    "microcms-js-sdk": "^3.3.0",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18"

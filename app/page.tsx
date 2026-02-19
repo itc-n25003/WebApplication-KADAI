@@ -1,33 +1,44 @@
 import Link from "next/link";
-import { fetchMicroCMSData } from "@/app/_libs/microcms";
-import { MicroCMSResponse } from "@/app/types/border";
+import { microcmsClient } from "@/lib/microcms";
+import type { BorderScore } from "@/types/borderscore";
 
 export default async function HomePage() {
-  const data: MicroCMSResponse = await fetchMicroCMSData();
+  const data = await microcmsClient.getList<BorderScore>({
+    endpoint: "borderscore",
+    queries: {
+      limit: 100,
+      fields: "server.server,server.serverNumber",
+    },
+  });
 
-  // 重複除いたサーバーリスト
-  const servers = Array.from(
-    new Map(
-      data.contents
-        .flatMap((item) => item.server)
-        .map((s) => [s.serverNumber, s]),
-    ).values(),
+  // serverNumber で重複除去
+  const serverMap = new Map<string, string>();
+
+  data.contents.forEach((item) => {
+    serverMap.set(item.server.serverNumber, item.server.server);
+  });
+
+  // 昇順に並べる
+  const servers = Array.from(serverMap.entries()).sort(
+    ([a], [b]) => Number(a) - Number(b),
   );
 
   return (
-    <main className="p-4">
+    <div className="p-8">
+      <h1 className="text-xl font-bold mb-4">サーバ一覧</h1>
+
       <ul className="space-y-2">
-        {servers.map((s) => (
-          <li key={s.id}>
+        {servers.map(([serverNumber, serverName]) => (
+          <li key={serverNumber}>
             <Link
+              href={`/servers/${serverNumber}`}
               className="text-blue-600 underline"
-              href={`/server/${s.serverNumber}`}
             >
-              {s.server} ({s.serverNumber})
+              {serverName}
             </Link>
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
 }
