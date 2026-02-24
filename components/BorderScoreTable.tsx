@@ -77,10 +77,10 @@ export default function BorderScoreTable({ data }: Props) {
         <thead>
           <tr>
             <th className="border p-2">年月</th>
-            <th className="border p-2">聯合艦隊基幹艦隊(5位)</th>
-            <th className="border p-2">主力艦隊第一群(20位)</th>
-            <th className="border p-2">主力艦隊第二群(100位)</th>
-            <th className="border p-2">主力艦隊第三群(500位)</th>
+            <th className="border p-2">聯合艦隊基幹艦隊</th>
+            <th className="border p-2">主力艦隊第一群</th>
+            <th className="border p-2">主力艦隊第二群</th>
+            <th className="border p-2">主力艦隊第三群</th>
           </tr>
         </thead>
         <tbody>
