@@ -29,6 +29,10 @@ export default async function ServerPage({ params }: Props) {
     return <div className="p-8">データがありません</div>;
   }
 
+  // ⭐ 現在の月を取得（例: "2月"）
+  const now = new Date();
+  const currentMonth = `${now.getMonth() + 1}月`;
+
   return (
     <div className="flex h-screen">
       {/* 左 */}
@@ -40,7 +44,7 @@ export default async function ServerPage({ params }: Props) {
       <div className="w-1/2 p-6 overflow-auto">
         <h1 className="text-xl font-bold mb-4">{filtered[0].server.server}</h1>
 
-        <BorderScoreTable data={filtered} />
+        <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
       </div>
     </div>
   );
