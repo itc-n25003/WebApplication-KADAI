@@ -1,6 +1,7 @@
 import { getAllBorderScores } from "@/utils/getAllBorderScores";
 import LeftIframe from "@/components/LeftIframe";
 import BorderScoreTable from "@/components/BorderScoreTable";
+import Header from "@/components/Header";
 
 type Props = {
   params: {
@@ -29,22 +30,29 @@ export default async function ServerPage({ params }: Props) {
     return <div className="p-8">データがありません</div>;
   }
 
-  // ⭐ 現在の月を取得（例: "2月"）
   const now = new Date();
   const currentMonth = `${now.getMonth() + 1}月`;
 
   return (
-    <div className="flex h-screen">
-      {/* 左 */}
-      <div className="w-1/2 border-r">
-        <LeftIframe serverNumber={serverNumber} />
-      </div>
+    <div className="h-screen flex flex-col">
+      {/* ヘッダー */}
+      <Header />
 
-      {/* 右 */}
-      <div className="w-1/2 p-6 overflow-auto">
-        <h1 className="text-xl font-bold mb-4">{filtered[0].server.server}</h1>
+      {/* メイン */}
+      <div className="flex flex-1">
+        {/* 左 */}
+        <div className="w-1/2 border-r">
+          <LeftIframe serverNumber={serverNumber} />
+        </div>
 
-        <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
+        {/* 右 */}
+        <div className="w-1/2 p-6 overflow-auto">
+          <h1 className="text-xl font-bold mb-4">
+            {filtered[0].server.server}
+          </h1>
+
+          <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
+        </div>
       </div>
     </div>
   );
