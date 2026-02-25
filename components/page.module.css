@@ -1,4 +1,115 @@
-.IframeSize {
-  width: 800px;
-  height: 750px;
+.iframeWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.iframe {
+  width: 100%;
+  height: 700px;
+  border: none;
+}
+
+/*BorderScoreTable.tsxのcss*/
+/* 表全体 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 20px;
+}
+
+/* ヘッダー */
+.table thead th {
+  background-color: #f3f4f6; /* 薄グレー */
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* 本文セル */
+.table tbody td {
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  text-align: center;
+}
+
+/* 行ホバー（任意） */
+.table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* 全体 */
+.iframeWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ⭐ iframe と loading 用 */
+.iframeContainer {
+  position: relative;
+}
+
+/* iframe */
+.iframe {
+  width: 100%;
+  height: 700px;
+  border: none;
+  border-radius: 3%;
+}
+
+/* ロード画面 */
+.loading {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: 3%;
+  background: #5a75ff;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.loadingFadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* スピナー */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*footer*/
+.ExternalSite {
+  text-align: center;
+  color: white;
+  background-color: black;
+  padding: 20px;
+}
+
+.footerList {
+  list-style: none;
+}
+
+.footerList:hover {
+  color: #5a75ff;
 }

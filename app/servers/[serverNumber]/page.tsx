@@ -34,7 +34,6 @@ export default async function ServerPage({ params }: Props) {
       const yB = Number(b.year.year);
       const mA = Number(a.month.month.replace("月", ""));
       const mB = Number(b.month.month.replace("月", ""));
-
       if (yA !== yB) return yB - yA;
       return mB - mA;
     });
@@ -43,65 +42,45 @@ export default async function ServerPage({ params }: Props) {
     return <div className="p-8">データがありません</div>;
   }
 
-  const now = new Date();
-  const currentMonth = `${now.getMonth() + 1}月`;
+  const currentMonth = `${new Date().getMonth() + 1}月`;
 
   return (
-    /* ===== 背景 ===== */
     <div
       className={styles.background}
-      style={{
-        backgroundImage: `url(/BG-${serverNumber}.png)`,
-      }}
+      style={{ backgroundImage: `url(/BG-${serverNumber}.png)` }}
     >
-      {/* ===== 白オーバーレイ ===== */}
       <div className={styles.overlay}>
         <Header prevServer={prevServer} nextServer={nextServer} />
-        <div className={styles.serverData}>
-          <div className="flex flex-1">
-            {/* 左 */}
-            <div className={styles.IframeSize}>
-              <LeftIframe serverNumber={serverNumber} />
+
+        {/*  横並びエリア */}
+        <main className={styles.main}>
+          {/* 左：引用 iframe */}
+          <section className={styles.leftPane}>
+            <LeftIframe serverNumber={serverNumber} />
+          </section>
+
+          {/* 右：microCMS */}
+          <section className={styles.rightPane}>
+            <h1 className={styles.serverTitle}>{filtered[0].server.server}</h1>
+
+            <div className={styles.tableWrapper}>
+              <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
             </div>
+          </section>
+        </main>
+        <div className={styles.nav}>
+          {prevServer ? (
+            <Link href={`/servers/${prevServer.num}`}>← {prevServer.name}</Link>
+          ) : (
+            <span />
+          )}
 
-            {/* 右 */}
-            <div>
-              <h1 className="text-xl font-bold mb-4">
-                {filtered[0].server.server}
-              </h1>
-
-              {/* ⭐ microCMS 表だけ白背景 */}
-              <div className={styles.tableWrapper}>
-                <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
-              </div>
-            </div>
-
-            <div className="flex justify-between mt-8 pt-4 border-t">
-              {prevServer ? (
-                <Link
-                  href={`/servers/${prevServer.num}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  ← {prevServer.name}
-                </Link>
-              ) : (
-                <div />
-              )}
-
-              {nextServer ? (
-                <Link
-                  href={`/servers/${nextServer.num}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {nextServer.name} →
-                </Link>
-              ) : (
-                <div />
-              )}
-            </div>
-          </div>
+          {nextServer ? (
+            <Link href={`/servers/${nextServer.num}`}>{nextServer.name} →</Link>
+          ) : (
+            <span />
+          )}
         </div>
-
         <Footer />
       </div>
     </div>

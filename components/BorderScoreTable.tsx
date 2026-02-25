@@ -1,24 +1,22 @@
 "use client";
-
+import styles from "./page.module.css";
 import { useMemo, useState } from "react";
 import type { BorderScore } from "@/types/borderscore";
 
 type Props = {
   data: BorderScore[];
-  defaultMonth: string; // ⭐ 追加
+  defaultMonth: string;
 };
 
 export default function BorderScoreTable({ data, defaultMonth }: Props) {
   const [year, setYear] = useState<string>("all");
   const [month, setMonth] = useState<string>(defaultMonth);
 
-  // 年一覧
   const years = useMemo(() => {
     const set = new Set(data.map((d) => d.year.year));
     return Array.from(set).sort((a, b) => Number(b) - Number(a));
   }, [data]);
 
-  // 月一覧（選択年に応じて変化）
   const months = useMemo(() => {
     const filtered =
       year === "all" ? data : data.filter((d) => d.year.year === year);
@@ -30,7 +28,6 @@ export default function BorderScoreTable({ data, defaultMonth }: Props) {
     );
   }, [data, year]);
 
-  // フィルタ後データ
   const filteredData = useMemo(() => {
     return data.filter((d) => {
       if (year !== "all" && d.year.year !== year) return false;
@@ -41,7 +38,7 @@ export default function BorderScoreTable({ data, defaultMonth }: Props) {
 
   return (
     <>
-      {/* フィルタUI */}
+      {/* フィルタ */}
       <div className="flex gap-4 mb-4">
         <select
           value={year}
@@ -73,27 +70,27 @@ export default function BorderScoreTable({ data, defaultMonth }: Props) {
         </select>
       </div>
 
-      {/* テーブル */}
-      <table className="border-collapse border border-gray-400 w-full">
+      {/* ⭐ テーブル */}
+      <table className={styles.table}>
         <thead>
           <tr>
-            <th className="border p-2">年月</th>
-            <th className="border p-2">聯合艦隊基幹艦隊</th>
-            <th className="border p-2">主力艦隊第一群</th>
-            <th className="border p-2">主力艦隊第二群</th>
-            <th className="border p-2">主力艦隊第三群</th>
+            <th>年月</th>
+            <th>聯合艦隊基幹艦隊</th>
+            <th>主力艦隊第一群</th>
+            <th>主力艦隊第二群</th>
+            <th>主力艦隊第三群</th>
           </tr>
         </thead>
         <tbody>
           {filteredData.map((item) => (
             <tr key={item.id}>
-              <td className="border p-2">
+              <td>
                 {item.year.year} / {item.month.month}
               </td>
-              <td className="border p-2">{item["border-TOP"]}</td>
-              <td className="border p-2">{item["border-1"]}</td>
-              <td className="border p-2">{item["border-2"]}</td>
-              <td className="border p-2">{item["border-3"]}</td>
+              <td>{item["border-TOP"]}</td>
+              <td>{item["border-1"]}</td>
+              <td>{item["border-2"]}</td>
+              <td>{item["border-3"]}</td>
             </tr>
           ))}
         </tbody>
