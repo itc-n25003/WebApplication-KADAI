@@ -1,3 +1,4 @@
+import styles from "./page.module.css";
 import IframeSourceLink from "@/components/IframeSourceLink";
 
 type Props = {
@@ -9,7 +10,7 @@ export default function LeftIframe({ serverNumber }: Props) {
     <div className="flex flex-col h-full">
       <iframe
         src={`https://senka.su/world?num=${serverNumber}`}
-        className="w-full flex-1 border"
+        className={styles.IframeSize}
         loading="lazy"
       />
 

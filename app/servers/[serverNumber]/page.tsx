@@ -57,20 +57,24 @@ export default async function ServerPage({ params }: Props) {
       {/* ===== 白オーバーレイ ===== */}
       <div className={styles.overlay}>
         <Header prevServer={prevServer} nextServer={nextServer} />
+        <div className={styles.serverData}>
+          <div className="flex flex-1">
+            {/* 左 */}
+            <div className={styles.IframeSize}>
+              <LeftIframe serverNumber={serverNumber} />
+            </div>
 
-        <div className="flex flex-1">
-          {/* 左 */}
-          <div className="w-1/2 border-r">
-            <LeftIframe serverNumber={serverNumber} />
-          </div>
+            {/* 右 */}
+            <div>
+              <h1 className="text-xl font-bold mb-4">
+                {filtered[0].server.server}
+              </h1>
 
-          {/* 右 */}
-          <div className="w-1/2 p-6 overflow-auto">
-            <h1 className="text-xl font-bold mb-4">
-              {filtered[0].server.server}
-            </h1>
-
-            <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
+              {/* ⭐ microCMS 表だけ白背景 */}
+              <div className={styles.tableWrapper}>
+                <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
+              </div>
+            </div>
 
             <div className="flex justify-between mt-8 pt-4 border-t">
               {prevServer ? (

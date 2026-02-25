@@ -2,55 +2,85 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-type ServerLink = {
+type Server = {
   num: string;
   name: string;
-} | null;
-
-type Props = {
-  prevServer: ServerLink;
-  nextServer: ServerLink;
 };
 
+type Props = {
+  prevServer: Server | null;
+  nextServer: Server | null;
+};
+
+declare global {
+  interface Window {
+    __KANCOLLE_COMMAND_ROOM__?: Window | null;
+  }
+}
+
 export default function Header({ prevServer, nextServer }: Props) {
-  const router = useRouter();
+  const openCommandRoom = () => {
+    const w = window.__KANCOLLE_COMMAND_ROOM__;
 
+    // すでに開いていて、閉じられていない
+    if (w && !w.closed) {
+      w.focus(); // ⭐ リロードなし
+      return;
+    }
+
+    // 初回 or 閉じられていた場合のみ open
+    window.__KANCOLLE_COMMAND_ROOM__ = window.open(
+      "https://play.games.dmm.com/game/kancolle",
+      "kancolle-command-room",
+    );
+  };
+
+  // ◀ ▶ キーボード操作
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // ◀ 左キー → 前のサーバ
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" && prevServer) {
-        router.push(`/servers/${prevServer.num}`);
+        location.href = `/servers/${prevServer.num}`;
       }
-
-      // ▶ 右キー → 次のサーバ
       if (e.key === "ArrowRight" && nextServer) {
-        router.push(`/servers/${nextServer.num}`);
+        location.href = `/servers/${nextServer.num}`;
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [prevServer, nextServer, router]);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [prevServer, nextServer]);
 
   return (
-    <header className="flex items-center justify-between px-6 py-3 border-b bg-white">
-      <div className="flex gap-4">
+    <header className="flex items-center justify-between px-6 py-3 border-b bg-white/80 backdrop-blur">
+      {/* 左 */}
+      <div className="flex gap-4 items-center">
         <Link href="/" className="font-bold hover:underline">
           TOP
         </Link>
-        <a
-          href="https://play.games.dmm.com/game/kancolle"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:underline"
+
+        {/* ⭐ 司令部 */}
+        <button
+          onClick={openCommandRoom}
+          className="text-blue-600 hover:underline"
         >
           司令部
-        </a>
+        </button>
       </div>
 
-      <div className="text-sm text-gray-500">◀ ▶ キーでサーバ切替</div>
+      {/* 右 */}
+      <div className="flex gap-6">
+        {prevServer && (
+          <Link href={`/servers/${prevServer.num}`} className="hover:underline">
+            ◀ {prevServer.name}
+          </Link>
+        )}
+        {nextServer && (
+          <Link href={`/servers/${nextServer.num}`} className="hover:underline">
+            {nextServer.name} ▶
+          </Link>
+        )}
+      </div>
     </header>
   );
 }
