@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "./page.module.css";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -20,16 +20,18 @@ declare global {
 }
 
 export default function Header({ prevServer, nextServer }: Props) {
-  const openCommandRoom = () => {
+  const openCommandRoom = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault(); // ⭐ これが超重要
+
     const w = window.__KANCOLLE_COMMAND_ROOM__;
 
-    // すでに開いていて、閉じられていない
+    // すでに開いていて、閉じられていない場合
     if (w && !w.closed) {
-      w.focus(); // ⭐ リロードなし
+      w.focus(); // リロードなしでそのタブへ
       return;
     }
 
-    // 初回 or 閉じられていた場合のみ open
+    // 初回 or 閉じられていた場合のみ新規タブ
     window.__KANCOLLE_COMMAND_ROOM__ = window.open(
       "https://play.games.dmm.com/game/kancolle",
       "kancolle-command-room",
@@ -52,34 +54,26 @@ export default function Header({ prevServer, nextServer }: Props) {
   }, [prevServer, nextServer]);
 
   return (
-    <header className="flex items-center justify-between px-6 py-3 border-b bg-white/80 backdrop-blur">
-      {/* 左 */}
-      <div className="flex gap-4 items-center">
-        <Link href="/" className="font-bold hover:underline">
+    <header className={styles.headerStyle}>
+      <div>
+        {prevServer && <Link href={`/servers/${prevServer.num}`}>◀</Link>}
+        サーバ移動
+        {nextServer && <Link href={`/servers/${nextServer.num}`}>▶</Link>}
+      </div>
+
+      <div className={styles.headerLinks}>
+        <Link href="/" className={styles.headerLink}>
           TOP
         </Link>
 
-        {/* ⭐ 司令部 */}
-        <button
+        {/* ⭐ 司令部リンク（別タブ・再利用） */}
+        <a
+          href="https://play.games.dmm.com/game/kancolle"
           onClick={openCommandRoom}
-          className="text-blue-600 hover:underline"
+          className={styles.headerLink}
         >
-          司令部
-        </button>
-      </div>
-
-      {/* 右 */}
-      <div className="flex gap-6">
-        {prevServer && (
-          <Link href={`/servers/${prevServer.num}`} className="hover:underline">
-            ◀ {prevServer.name}
-          </Link>
-        )}
-        {nextServer && (
-          <Link href={`/servers/${nextServer.num}`} className="hover:underline">
-            {nextServer.name} ▶
-          </Link>
-        )}
+          司令部（ゲームブラウザを開きます）
+        </a>
       </div>
     </header>
   );
