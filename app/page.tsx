@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { microcmsClient } from "@/lib/microcms";
 import type { BorderScore } from "@/types/borderscore";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default async function HomePage() {
   const data = await microcmsClient.getList<BorderScore>({
@@ -39,6 +41,7 @@ export default async function HomePage() {
           </li>
         ))}
       </ul>
+      <Footer />
     </div>
   );
 }

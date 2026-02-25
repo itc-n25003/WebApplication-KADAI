@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { getAllBorderScores } from "@/utils/getAllBorderScores";
 import LeftIframe from "@/components/LeftIframe";
 import BorderScoreTable from "@/components/BorderScoreTable";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import styles from "./page.module.css";
 
 type Props = {
   params: {
@@ -11,8 +14,18 @@ type Props = {
 
 export default async function ServerPage({ params }: Props) {
   const { serverNumber } = params;
-
   const allData = await getAllBorderScores();
+
+  const servers = Array.from(
+    new Map(allData.map((d) => [d.server.serverNumber, d.server.server])),
+  )
+    .map(([num, name]) => ({ num, name }))
+    .sort((a, b) => Number(a.num) - Number(b.num));
+
+  const currentIndex = servers.findIndex((s) => s.num === serverNumber);
+  const prevServer = currentIndex > 0 ? servers[currentIndex - 1] : null;
+  const nextServer =
+    currentIndex < servers.length - 1 ? servers[currentIndex + 1] : null;
 
   const filtered = allData
     .filter((d) => d.server.serverNumber === serverNumber)
@@ -34,25 +47,58 @@ export default async function ServerPage({ params }: Props) {
   const currentMonth = `${now.getMonth() + 1}月`;
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* ヘッダー */}
-      <Header />
+    /* ===== 背景 ===== */
+    <div
+      className={styles.background}
+      style={{
+        backgroundImage: `url(/BG-${serverNumber}.png)`,
+      }}
+    >
+      {/* ===== 白オーバーレイ ===== */}
+      <div className={styles.overlay}>
+        <Header prevServer={prevServer} nextServer={nextServer} />
 
-      {/* メイン */}
-      <div className="flex flex-1">
-        {/* 左 */}
-        <div className="w-1/2 border-r">
-          <LeftIframe serverNumber={serverNumber} />
+        <div className="flex flex-1">
+          {/* 左 */}
+          <div className="w-1/2 border-r">
+            <LeftIframe serverNumber={serverNumber} />
+          </div>
+
+          {/* 右 */}
+          <div className="w-1/2 p-6 overflow-auto">
+            <h1 className="text-xl font-bold mb-4">
+              {filtered[0].server.server}
+            </h1>
+
+            <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
+
+            <div className="flex justify-between mt-8 pt-4 border-t">
+              {prevServer ? (
+                <Link
+                  href={`/servers/${prevServer.num}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  ← {prevServer.name}
+                </Link>
+              ) : (
+                <div />
+              )}
+
+              {nextServer ? (
+                <Link
+                  href={`/servers/${nextServer.num}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {nextServer.name} →
+                </Link>
+              ) : (
+                <div />
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* 右 */}
-        <div className="w-1/2 p-6 overflow-auto">
-          <h1 className="text-xl font-bold mb-4">
-            {filtered[0].server.server}
-          </h1>
-
-          <BorderScoreTable data={filtered} defaultMonth={currentMonth} />
-        </div>
+        <Footer />
       </div>
     </div>
   );

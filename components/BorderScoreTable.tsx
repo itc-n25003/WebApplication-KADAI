@@ -5,18 +5,20 @@ import type { BorderScore } from "@/types/borderscore";
 
 type Props = {
   data: BorderScore[];
-  defaultMonth: string;
+  defaultMonth: string; // ⭐ 追加
 };
 
 export default function BorderScoreTable({ data, defaultMonth }: Props) {
   const [year, setYear] = useState<string>("all");
   const [month, setMonth] = useState<string>(defaultMonth);
 
+  // 年一覧
   const years = useMemo(() => {
     const set = new Set(data.map((d) => d.year.year));
     return Array.from(set).sort((a, b) => Number(b) - Number(a));
   }, [data]);
 
+  // 月一覧（選択年に応じて変化）
   const months = useMemo(() => {
     const filtered =
       year === "all" ? data : data.filter((d) => d.year.year === year);
@@ -28,6 +30,7 @@ export default function BorderScoreTable({ data, defaultMonth }: Props) {
     );
   }, [data, year]);
 
+  // フィルタ後データ
   const filteredData = useMemo(() => {
     return data.filter((d) => {
       if (year !== "all" && d.year.year !== year) return false;
