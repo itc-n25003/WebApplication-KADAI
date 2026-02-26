@@ -58,6 +58,9 @@
   color: white;
   font-size: 20px;
 }
+.serverLink:hover {
+  color: rgb(65, 44, 255);
+}
 
 /* レスポンシブ */
 @media (max-width: 1024px) {
