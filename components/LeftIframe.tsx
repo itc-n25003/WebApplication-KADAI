@@ -55,7 +55,7 @@ export default function LeftIframe({ serverNumber }: Props) {
         {error && (
           <div className={styles.errorWrapper}>
             <img src="/error.png" alt="読み込み失敗" />
-            <p className="text-sm text-gray-600">表示できませんでした</p>
+            <p>表示できませんでした</p>
           </div>
         )}
       </div>

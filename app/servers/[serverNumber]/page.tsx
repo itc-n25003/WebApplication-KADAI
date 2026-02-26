@@ -70,13 +70,23 @@ export default async function ServerPage({ params }: Props) {
         </main>
         <div className={styles.nav}>
           {prevServer ? (
-            <Link href={`/servers/${prevServer.num}`}>← {prevServer.name}</Link>
+            <Link
+              className={styles.serverLink}
+              href={`/servers/${prevServer.num}`}
+            >
+              ← {prevServer.name}
+            </Link>
           ) : (
             <span />
           )}
 
           {nextServer ? (
-            <Link href={`/servers/${nextServer.num}`}>{nextServer.name} →</Link>
+            <Link
+              className={styles.serverLink}
+              href={`/servers/${nextServer.num}`}
+            >
+              {nextServer.name} →
+            </Link>
           ) : (
             <span />
           )}

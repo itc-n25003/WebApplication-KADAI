@@ -54,6 +54,11 @@
   margin-top: 24px;
 }
 
+.serverLink {
+  color: white;
+  font-size: 20px;
+}
+
 /* レスポンシブ */
 @media (max-width: 1024px) {
   .main {
